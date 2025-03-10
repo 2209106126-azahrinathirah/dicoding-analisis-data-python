@@ -4,7 +4,7 @@ Proyek analisis data untuk submission dicoding menggunakan dataset Air Quality
 ## Requirements
 ```
 Pastikan anda sudah menginstall python
-Install library yang berada dalam file requirement.txt
+Install library yang berada dalam file requirements.txt
 ```
 
 ## Setup Environment - Shell/Terminal
