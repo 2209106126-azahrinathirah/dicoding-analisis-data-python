@@ -6,7 +6,7 @@ import streamlit as st
 sns.set(style='darkgrid')
 
 # Load dataset
-df = pd.read_csv("main_data.csv")  # Pastikan file ada di direktori yang benar
+df = pd.read_csv("dashboard/main_data.csv")  # Pastikan file ada di direktori yang benar
 
 # Pastikan kolom datetime dalam format yang benar
 df['datetime'] = pd.to_datetime(df['datetime'])
