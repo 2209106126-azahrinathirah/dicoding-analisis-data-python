@@ -6,10 +6,9 @@ import folium
 from streamlit_folium import folium_static
 from branca.element import Template, MacroElement
 
-
 # Load dataset
-df = pd.read_csv("dashboard/main_data.csv")
-avg_pm25_season_station = pd.read_csv("dashboard/data_geospasial_pm25_musiman.csv")
+df = pd.read_csv("main_data.csv")
+avg_pm25_season_station = pd.read_csv("data_geospasial_pm25_musiman.csv")
 
 # Sidebar untuk memilih stasiun
 location = st.sidebar.selectbox("Pilih Stasiun", df['station'].unique())
@@ -235,7 +234,17 @@ musim_icons = {
     'Musim Gugur': 'tree',
 }
 
+# Fungsi kategorisasi warna untuk folium
 def categorize_color(pm25):
+    if pm25 < 70:
+        return 'green'
+    elif pm25 < 85:
+        return 'orange'
+    else:
+        return 'red'
+
+# Fungsi kategori teks
+def get_pm25_label(pm25):
     if pm25 < 70:
         return 'Sedang'
     elif pm25 < 85:
@@ -243,28 +252,32 @@ def categorize_color(pm25):
     else:
         return 'Sangat Tinggi'
 
-
-# Pilih musim
+# Pilih musim dari UI
 musim_terpilih = st.radio("Pilih Musim:", list(musim_icons.keys()), horizontal=True)
 
-# Peta
+# Buat peta folium
 m = folium.Map(location=[39.9042, 116.4074], zoom_start=10, tiles="CartoDB positron")
+
+# Filter data berdasarkan musim
 musim_data = avg_pm25_season_station[avg_pm25_season_station['Musim'] == musim_terpilih].copy()
 musim_data['lat'] = musim_data['station'].map(lambda x: station_locations.get(x, [None, None])[0])
 musim_data['lon'] = musim_data['station'].map(lambda x: station_locations.get(x, [None, None])[1])
 
+# Tambahkan marker ke peta
 for _, row in musim_data.iterrows():
     if pd.isna(row['lat']) or pd.isna(row['lon']):
         continue
-    color = categorize_color(row['PM2.5'])
+    color = categorize_color(row['PM2.5'])          # ⬅️ warna sesuai PM2.5
+    kategori = get_pm25_label(row['PM2.5'])         # ⬅️ teks label
     icon_name = musim_icons[musim_terpilih]
-    kategori = 'Sedang' if color == 'green' else 'Tinggi' if color == 'orange' else 'Sangat Tinggi'
+
     popup_html = f"""
     <b>Stasiun:</b> {row['station']}<br>
     <b>Musim:</b> {musim_terpilih}<br>
     <b>PM2.5 Rata-rata:</b> {row['PM2.5']:.2f} µg/m³<br>
     <b>Kategori:</b> {kategori}
     """
+
     folium.Marker(
         location=[row['lat'], row['lon']],
         popup=folium.Popup(popup_html, max_width=250),
@@ -272,7 +285,7 @@ for _, row in musim_data.iterrows():
         icon=folium.Icon(color=color, icon=icon_name, prefix='fa')
     ).add_to(m)
 
-# Tambahkan legenda
+# Legenda peta
 legend_html = """
 {% macro html(this, kwargs) %}
 <div style="
@@ -300,12 +313,11 @@ legend = MacroElement()
 legend._template = Template(legend_html)
 m.get_root().add_child(legend)
 
+# Tampilkan peta
 folium_static(m)
 
-# Dapatkan 3 stasiun dengan nilai PM2.5 tertinggi pada musim yang dipilih
+# Statistik dan Insight
 top3 = musim_data.sort_values(by='PM2.5', ascending=False).head(3)
-
-# Hitung statistik deskriptif PM2.5 di musim yang dipilih
 mean_musim = musim_data['PM2.5'].mean()
 max_musim = musim_data['PM2.5'].max()
 min_musim = musim_data['PM2.5'].min()
@@ -320,6 +332,7 @@ st.markdown(f"""
   3. **{top3.iloc[2]['station']}**: {top3.iloc[2]['PM2.5']:.2f} µg/m³
 - PM2.5 tertinggi mencapai **{max_musim:.2f} µg/m³**, sedangkan yang terendah adalah **{min_musim:.2f} µg/m³**
 """)
+
 
 # ========== 5. Distribusi Kategori PM2.5 per Stasiun per Musim ==========
 
