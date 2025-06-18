@@ -1,2 +1,2 @@
-Tautan dashboard interaktif:
+Tautan Dashboard Streamlit:
 https://jqfpa63ja9rfkewseshbdq.streamlit.app/
