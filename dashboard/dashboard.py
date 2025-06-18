@@ -8,8 +8,8 @@ from branca.element import Template, MacroElement
 
 
 # Load dataset
-df = pd.read_csv("main_data.csv")
-avg_pm25_season_station = pd.read_csv("data_geospasial_pm25_musiman.csv")
+df = pd.read_csv("dashboard/main_data.csv")
+avg_pm25_season_station = pd.read_csv("dashboard/data_geospasial_pm25_musiman.csv")
 
 # Sidebar untuk memilih stasiun
 location = st.sidebar.selectbox("Pilih Stasiun", df['station'].unique())
