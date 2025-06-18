@@ -1,0 +1,2659 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_d2a4bdc3a2b947bc4fb37d16e6da0d90 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+<div style="
+    position: fixed;
+    bottom: 50px; left: 50px;
+    width: 240px;
+    background-color: white;
+    border: 2px solid grey;
+    z-index: 9999;
+    font-size: 16px;
+    padding: 15px;
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+    border-radius: 8px;
+    line-height: 1.5;
+    word-wrap: break-word;
+">
+    <b>Kategori PM2.5</b><br><br>
+    <i class="fa fa-map-marker fa-2x" style="color:green; vertical-align: middle;"></i>&nbsp;Rendah (&lt; 65)<br><br>
+    <i class="fa fa-map-marker fa-2x" style="color:orange; vertical-align: middle;"></i>&nbsp;Sedang (65-75)<br><br>
+    <i class="fa fa-map-marker fa-2x" style="color:red; vertical-align: middle;"></i>&nbsp;Tinggi (&gt; 75)<br>
+</div>
+    
+<script>
+window.addEventListener('load', function() {
+  var checkboxes = document.querySelectorAll('.leaflet-control-layers-selector');
+  checkboxes.forEach(function(cb) {
+    var label = cb.nextSibling.textContent.trim();
+    if (['Musim Dingin', 'Musim Semi', 'Musim Panas', 'Musim Gugur'].includes(label)) {
+      cb.type = 'radio';
+      cb.name = 'season';
+    } else {
+      cb.type = 'checkbox';
+      cb.name = '';
+    }
+  });
+});
+</script>
+    
+            <div class="folium-map" id="map_d2a4bdc3a2b947bc4fb37d16e6da0d90" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_d2a4bdc3a2b947bc4fb37d16e6da0d90 = L.map(
+                "map_d2a4bdc3a2b947bc4fb37d16e6da0d90",
+                {
+                    center: [39.9042, 116.4074],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 10,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_16625592e0291f6f7eec5e621d87a143 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_16625592e0291f6f7eec5e621d87a143.addTo(map_d2a4bdc3a2b947bc4fb37d16e6da0d90);
+        
+    
+            var feature_group_16661fe17e2aee8d5dee53b020298c63 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_aacc37234754bf129d0e5733bfc76ce7 = L.marker(
+                [39.909, 116.397],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_d34d901a42b334a40c01ca39abd0d05e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_219526c78e7ea7217445f9cc148f7857 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_846662989af9d5f65cda2e15bdc84847 = $(`<div id="html_846662989af9d5f65cda2e15bdc84847" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Aotizhongxin<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 94.32 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_219526c78e7ea7217445f9cc148f7857.setContent(html_846662989af9d5f65cda2e15bdc84847);
+            
+        
+
+        marker_aacc37234754bf129d0e5733bfc76ce7.bindPopup(popup_219526c78e7ea7217445f9cc148f7857)
+        ;
+
+        
+    
+    
+            marker_aacc37234754bf129d0e5733bfc76ce7.bindTooltip(
+                `<div>
+                     Aotizhongxin | Musim Dingin | 94.3 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_aacc37234754bf129d0e5733bfc76ce7.setIcon(icon_d34d901a42b334a40c01ca39abd0d05e);
+            
+    
+            var marker_6d89c9b9788356a030c35f202dfc4bfb = L.marker(
+                [40.218, 116.231],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_f44273e07d8953d0958fd8aaa6b23bae = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_cc53a58b8ce30fedca11f81ac6092244 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_2341bded5d0a16419497b781a4d12f80 = $(`<div id="html_2341bded5d0a16419497b781a4d12f80" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Changping<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 84.58 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_cc53a58b8ce30fedca11f81ac6092244.setContent(html_2341bded5d0a16419497b781a4d12f80);
+            
+        
+
+        marker_6d89c9b9788356a030c35f202dfc4bfb.bindPopup(popup_cc53a58b8ce30fedca11f81ac6092244)
+        ;
+
+        
+    
+    
+            marker_6d89c9b9788356a030c35f202dfc4bfb.bindTooltip(
+                `<div>
+                     Changping | Musim Dingin | 84.6 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6d89c9b9788356a030c35f202dfc4bfb.setIcon(icon_f44273e07d8953d0958fd8aaa6b23bae);
+            
+    
+            var marker_b06bfcea93581f7142013d51db0a5d47 = L.marker(
+                [40.292, 116.225],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_45abf1e879c38a46955c0e977637abd8 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_64cbbad56318982a4d4864b5f062fcc7 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_e43ba1b28c98701878de365e5ffa1a7f = $(`<div id="html_e43ba1b28c98701878de365e5ffa1a7f" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Dingling<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 77.62 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_64cbbad56318982a4d4864b5f062fcc7.setContent(html_e43ba1b28c98701878de365e5ffa1a7f);
+            
+        
+
+        marker_b06bfcea93581f7142013d51db0a5d47.bindPopup(popup_64cbbad56318982a4d4864b5f062fcc7)
+        ;
+
+        
+    
+    
+            marker_b06bfcea93581f7142013d51db0a5d47.bindTooltip(
+                `<div>
+                     Dingling | Musim Dingin | 77.6 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_b06bfcea93581f7142013d51db0a5d47.setIcon(icon_45abf1e879c38a46955c0e977637abd8);
+            
+    
+            var marker_b7591a3072edb3a9786ff992ed441e1a = L.marker(
+                [39.929, 116.417],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_7fc948b6469309900a3b290fa577b257 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d2935ae9e92bb60d3cc513cc8c235ce8 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_3c87a489c77b00a305cb8c35988a02b9 = $(`<div id="html_3c87a489c77b00a305cb8c35988a02b9" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Dongsi<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 103.05 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_d2935ae9e92bb60d3cc513cc8c235ce8.setContent(html_3c87a489c77b00a305cb8c35988a02b9);
+            
+        
+
+        marker_b7591a3072edb3a9786ff992ed441e1a.bindPopup(popup_d2935ae9e92bb60d3cc513cc8c235ce8)
+        ;
+
+        
+    
+    
+            marker_b7591a3072edb3a9786ff992ed441e1a.bindTooltip(
+                `<div>
+                     Dongsi | Musim Dingin | 103.1 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_b7591a3072edb3a9786ff992ed441e1a.setIcon(icon_7fc948b6469309900a3b290fa577b257);
+            
+    
+            var marker_1afdace0339daab9adde921314d0c84c = L.marker(
+                [39.933, 116.362],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_406660385a4e515156c643b6a2648df2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a6c9353b5c979fe147541ff4c4b7e065 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_7aff876748811522a5ac193eb6a36680 = $(`<div id="html_7aff876748811522a5ac193eb6a36680" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Guanyuan<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 98.27 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_a6c9353b5c979fe147541ff4c4b7e065.setContent(html_7aff876748811522a5ac193eb6a36680);
+            
+        
+
+        marker_1afdace0339daab9adde921314d0c84c.bindPopup(popup_a6c9353b5c979fe147541ff4c4b7e065)
+        ;
+
+        
+    
+    
+            marker_1afdace0339daab9adde921314d0c84c.bindTooltip(
+                `<div>
+                     Guanyuan | Musim Dingin | 98.3 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_1afdace0339daab9adde921314d0c84c.setIcon(icon_406660385a4e515156c643b6a2648df2);
+            
+    
+            var marker_7ebb00a7af10ba33ca7356088f48dda1 = L.marker(
+                [39.914, 116.188],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_7aaca005d21e5a6462bbe02430eaf3c9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ddafa738fc8a01b078dd46dba2b302f1 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_3cdbf4db1ae7f6e6010c5399c0515d60 = $(`<div id="html_3cdbf4db1ae7f6e6010c5399c0515d60" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Gucheng<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 101.14 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_ddafa738fc8a01b078dd46dba2b302f1.setContent(html_3cdbf4db1ae7f6e6010c5399c0515d60);
+            
+        
+
+        marker_7ebb00a7af10ba33ca7356088f48dda1.bindPopup(popup_ddafa738fc8a01b078dd46dba2b302f1)
+        ;
+
+        
+    
+    
+            marker_7ebb00a7af10ba33ca7356088f48dda1.bindTooltip(
+                `<div>
+                     Gucheng | Musim Dingin | 101.1 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_7ebb00a7af10ba33ca7356088f48dda1.setIcon(icon_7aaca005d21e5a6462bbe02430eaf3c9);
+            
+    
+            var marker_79c33df8728c8b61d6d00bc310d7edab = L.marker(
+                [40.364, 116.631],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_969baf6ae671e6f45a73faa6d40d7dc7 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b9495b1f812e62d44ead9bcb4ff2e919 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_ef19f2576e5112740dfcab9589fd4136 = $(`<div id="html_ef19f2576e5112740dfcab9589fd4136" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Huairou<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 80.17 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_b9495b1f812e62d44ead9bcb4ff2e919.setContent(html_ef19f2576e5112740dfcab9589fd4136);
+            
+        
+
+        marker_79c33df8728c8b61d6d00bc310d7edab.bindPopup(popup_b9495b1f812e62d44ead9bcb4ff2e919)
+        ;
+
+        
+    
+    
+            marker_79c33df8728c8b61d6d00bc310d7edab.bindTooltip(
+                `<div>
+                     Huairou | Musim Dingin | 80.2 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_79c33df8728c8b61d6d00bc310d7edab.setIcon(icon_969baf6ae671e6f45a73faa6d40d7dc7);
+            
+    
+            var marker_9dfd6cb15cc020070c86fa87234531a1 = L.marker(
+                [39.933, 116.47],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_649811bcd3b698ff960cabfb404617d7 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_995ae7870198f638c7f29d68f58c25c2 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_db4cf24735c937577b231169d2486dda = $(`<div id="html_db4cf24735c937577b231169d2486dda" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Nongzhanguan<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 104.87 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_995ae7870198f638c7f29d68f58c25c2.setContent(html_db4cf24735c937577b231169d2486dda);
+            
+        
+
+        marker_9dfd6cb15cc020070c86fa87234531a1.bindPopup(popup_995ae7870198f638c7f29d68f58c25c2)
+        ;
+
+        
+    
+    
+            marker_9dfd6cb15cc020070c86fa87234531a1.bindTooltip(
+                `<div>
+                     Nongzhanguan | Musim Dingin | 104.9 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_9dfd6cb15cc020070c86fa87234531a1.setIcon(icon_649811bcd3b698ff960cabfb404617d7);
+            
+    
+            var marker_06784cad164e83294c6af6320aa32619 = L.marker(
+                [40.126, 116.655],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_ad8f7976080f4dd8d8b19af714ba8ca0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_93cf5d1010baf88c44d3e8650f4ab808 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_ccd2ba5fb8b76d33ab64373bea74b5a0 = $(`<div id="html_ccd2ba5fb8b76d33ab64373bea74b5a0" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Shunyi<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 95.26 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_93cf5d1010baf88c44d3e8650f4ab808.setContent(html_ccd2ba5fb8b76d33ab64373bea74b5a0);
+            
+        
+
+        marker_06784cad164e83294c6af6320aa32619.bindPopup(popup_93cf5d1010baf88c44d3e8650f4ab808)
+        ;
+
+        
+    
+    
+            marker_06784cad164e83294c6af6320aa32619.bindTooltip(
+                `<div>
+                     Shunyi | Musim Dingin | 95.3 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_06784cad164e83294c6af6320aa32619.setIcon(icon_ad8f7976080f4dd8d8b19af714ba8ca0);
+            
+    
+            var marker_5d78303c88fddab73bf430978783c955 = L.marker(
+                [39.876, 116.417],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_c3a5ffc9d4fb359911b8cc0549202b54 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3dbec6c3789af5181321a47b50e2f87e = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_272f5a251411244e17d1cb490c834a00 = $(`<div id="html_272f5a251411244e17d1cb490c834a00" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Tiantan<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 100.63 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_3dbec6c3789af5181321a47b50e2f87e.setContent(html_272f5a251411244e17d1cb490c834a00);
+            
+        
+
+        marker_5d78303c88fddab73bf430978783c955.bindPopup(popup_3dbec6c3789af5181321a47b50e2f87e)
+        ;
+
+        
+    
+    
+            marker_5d78303c88fddab73bf430978783c955.bindTooltip(
+                `<div>
+                     Tiantan | Musim Dingin | 100.6 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_5d78303c88fddab73bf430978783c955.setIcon(icon_c3a5ffc9d4fb359911b8cc0549202b54);
+            
+    
+            var marker_c925473d6e8b6ae2350127b3e915ac4e = L.marker(
+                [39.999, 116.288],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_2363c7d3bbb7260df8d6fdc636631ee7 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5564c1b49dce2b79e32e9878d1ad834e = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_78970042cb0dc6384e5eb9bdd56d9aa4 = $(`<div id="html_78970042cb0dc6384e5eb9bdd56d9aa4" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Wanliu<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 100.32 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_5564c1b49dce2b79e32e9878d1ad834e.setContent(html_78970042cb0dc6384e5eb9bdd56d9aa4);
+            
+        
+
+        marker_c925473d6e8b6ae2350127b3e915ac4e.bindPopup(popup_5564c1b49dce2b79e32e9878d1ad834e)
+        ;
+
+        
+    
+    
+            marker_c925473d6e8b6ae2350127b3e915ac4e.bindTooltip(
+                `<div>
+                     Wanliu | Musim Dingin | 100.3 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c925473d6e8b6ae2350127b3e915ac4e.setIcon(icon_2363c7d3bbb7260df8d6fdc636631ee7);
+            
+    
+            var marker_66ff69690c60283ea34098c51c1aa1ae = L.marker(
+                [39.882, 116.34],
+                {
+}
+            ).addTo(feature_group_16661fe17e2aee8d5dee53b020298c63);
+        
+    
+            var icon_4cdd900b950a02daa97854669c41a342 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "asterisk",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e1a861428c557ec560a3e7f2bd697dfa = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_8dd95538f6abf7c35ff456e789fa906e = $(`<div id="html_8dd95538f6abf7c35ff456e789fa906e" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Wanshouxigong<br>         <b>Musim:</b> Musim Dingin<br>         <b>Rata-rata PM2.5:</b> 108.69 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_e1a861428c557ec560a3e7f2bd697dfa.setContent(html_8dd95538f6abf7c35ff456e789fa906e);
+            
+        
+
+        marker_66ff69690c60283ea34098c51c1aa1ae.bindPopup(popup_e1a861428c557ec560a3e7f2bd697dfa)
+        ;
+
+        
+    
+    
+            marker_66ff69690c60283ea34098c51c1aa1ae.bindTooltip(
+                `<div>
+                     Wanshouxigong | Musim Dingin | 108.7 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_66ff69690c60283ea34098c51c1aa1ae.setIcon(icon_4cdd900b950a02daa97854669c41a342);
+            
+    
+            feature_group_16661fe17e2aee8d5dee53b020298c63.addTo(map_d2a4bdc3a2b947bc4fb37d16e6da0d90);
+        
+    
+            var feature_group_ff76aabf027e2316df1e9529fdce8bb4 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_bfe6ef8d09e0f2197a8c022efb6a3e7c = L.marker(
+                [39.909, 116.397],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_f74d9f7613d9771d5beb522a759793e0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2b4b29c2ccb15f3557386a458bb3cf50 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_188f518c00289bbb7fa14bb9f41a37e4 = $(`<div id="html_188f518c00289bbb7fa14bb9f41a37e4" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Aotizhongxin<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 81.95 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_2b4b29c2ccb15f3557386a458bb3cf50.setContent(html_188f518c00289bbb7fa14bb9f41a37e4);
+            
+        
+
+        marker_bfe6ef8d09e0f2197a8c022efb6a3e7c.bindPopup(popup_2b4b29c2ccb15f3557386a458bb3cf50)
+        ;
+
+        
+    
+    
+            marker_bfe6ef8d09e0f2197a8c022efb6a3e7c.bindTooltip(
+                `<div>
+                     Aotizhongxin | Musim Semi | 82.0 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_bfe6ef8d09e0f2197a8c022efb6a3e7c.setIcon(icon_f74d9f7613d9771d5beb522a759793e0);
+            
+    
+            var marker_bf47096eaa438931a28aaa47e077efa0 = L.marker(
+                [40.218, 116.231],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_e3d8c69d4abb6e711fc6e70a6b290a92 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_27e1c8f707b67c101935e0f438852b2c = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_e1bca1079b857830b9d17481003a1666 = $(`<div id="html_e1bca1079b857830b9d17481003a1666" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Changping<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 71.67 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_27e1c8f707b67c101935e0f438852b2c.setContent(html_e1bca1079b857830b9d17481003a1666);
+            
+        
+
+        marker_bf47096eaa438931a28aaa47e077efa0.bindPopup(popup_27e1c8f707b67c101935e0f438852b2c)
+        ;
+
+        
+    
+    
+            marker_bf47096eaa438931a28aaa47e077efa0.bindTooltip(
+                `<div>
+                     Changping | Musim Semi | 71.7 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_bf47096eaa438931a28aaa47e077efa0.setIcon(icon_e3d8c69d4abb6e711fc6e70a6b290a92);
+            
+    
+            var marker_1320bc502fa50f9483f96bdfe08df226 = L.marker(
+                [40.292, 116.225],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_43d5d1bf90907be290f73a673ae7e999 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4d9570aa75168917551a2104ba87c8d9 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_9d72ded392a08b27f2ac7b0956e01d95 = $(`<div id="html_9d72ded392a08b27f2ac7b0956e01d95" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Dingling<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 68.12 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_4d9570aa75168917551a2104ba87c8d9.setContent(html_9d72ded392a08b27f2ac7b0956e01d95);
+            
+        
+
+        marker_1320bc502fa50f9483f96bdfe08df226.bindPopup(popup_4d9570aa75168917551a2104ba87c8d9)
+        ;
+
+        
+    
+    
+            marker_1320bc502fa50f9483f96bdfe08df226.bindTooltip(
+                `<div>
+                     Dingling | Musim Semi | 68.1 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_1320bc502fa50f9483f96bdfe08df226.setIcon(icon_43d5d1bf90907be290f73a673ae7e999);
+            
+    
+            var marker_382945f4ff2c1170dc9d8cd6fbaa435c = L.marker(
+                [39.929, 116.417],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_c7e7810f757b255c544863a431e256c0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f7edefdf7da1b31ebb2de35e0b0033e9 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_dae6dccbc84f8785b8828ed5ab334cc4 = $(`<div id="html_dae6dccbc84f8785b8828ed5ab334cc4" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Dongsi<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 82.43 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_f7edefdf7da1b31ebb2de35e0b0033e9.setContent(html_dae6dccbc84f8785b8828ed5ab334cc4);
+            
+        
+
+        marker_382945f4ff2c1170dc9d8cd6fbaa435c.bindPopup(popup_f7edefdf7da1b31ebb2de35e0b0033e9)
+        ;
+
+        
+    
+    
+            marker_382945f4ff2c1170dc9d8cd6fbaa435c.bindTooltip(
+                `<div>
+                     Dongsi | Musim Semi | 82.4 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_382945f4ff2c1170dc9d8cd6fbaa435c.setIcon(icon_c7e7810f757b255c544863a431e256c0);
+            
+    
+            var marker_ec43b6364e1b2cb196f9e62e56ee2b56 = L.marker(
+                [39.933, 116.362],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_ab6e310686bdc52a0e54ec86a050d6db = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d5e9419f08d57e1b941eaaa6a92e2f48 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_5ef8ca30ca887dd5194c9bcb64636190 = $(`<div id="html_5ef8ca30ca887dd5194c9bcb64636190" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Guanyuan<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 77.41 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_d5e9419f08d57e1b941eaaa6a92e2f48.setContent(html_5ef8ca30ca887dd5194c9bcb64636190);
+            
+        
+
+        marker_ec43b6364e1b2cb196f9e62e56ee2b56.bindPopup(popup_d5e9419f08d57e1b941eaaa6a92e2f48)
+        ;
+
+        
+    
+    
+            marker_ec43b6364e1b2cb196f9e62e56ee2b56.bindTooltip(
+                `<div>
+                     Guanyuan | Musim Semi | 77.4 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ec43b6364e1b2cb196f9e62e56ee2b56.setIcon(icon_ab6e310686bdc52a0e54ec86a050d6db);
+            
+    
+            var marker_efffb2a6340ac7054e705b8dc88be232 = L.marker(
+                [39.914, 116.188],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_f5807fc52ca53cad9b8dcfa201d00d04 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2a8bd7c865958d9cbd7aa845ab7f8fc7 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_36181bd985503bae18763e0cb71a8d15 = $(`<div id="html_36181bd985503bae18763e0cb71a8d15" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Gucheng<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 81.34 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_2a8bd7c865958d9cbd7aa845ab7f8fc7.setContent(html_36181bd985503bae18763e0cb71a8d15);
+            
+        
+
+        marker_efffb2a6340ac7054e705b8dc88be232.bindPopup(popup_2a8bd7c865958d9cbd7aa845ab7f8fc7)
+        ;
+
+        
+    
+    
+            marker_efffb2a6340ac7054e705b8dc88be232.bindTooltip(
+                `<div>
+                     Gucheng | Musim Semi | 81.3 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_efffb2a6340ac7054e705b8dc88be232.setIcon(icon_f5807fc52ca53cad9b8dcfa201d00d04);
+            
+    
+            var marker_ca0fd5b7d8996b3335c68dcd7032f580 = L.marker(
+                [40.364, 116.631],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_4ad92943bd013018309f01bd4f4e6eb2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_feef2d97ba2feb72761c2cb8ad0c2bca = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_d4db21aa3601d3d7a87d1cc9ca1566b8 = $(`<div id="html_d4db21aa3601d3d7a87d1cc9ca1566b8" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Huairou<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 71.35 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_feef2d97ba2feb72761c2cb8ad0c2bca.setContent(html_d4db21aa3601d3d7a87d1cc9ca1566b8);
+            
+        
+
+        marker_ca0fd5b7d8996b3335c68dcd7032f580.bindPopup(popup_feef2d97ba2feb72761c2cb8ad0c2bca)
+        ;
+
+        
+    
+    
+            marker_ca0fd5b7d8996b3335c68dcd7032f580.bindTooltip(
+                `<div>
+                     Huairou | Musim Semi | 71.4 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ca0fd5b7d8996b3335c68dcd7032f580.setIcon(icon_4ad92943bd013018309f01bd4f4e6eb2);
+            
+    
+            var marker_8d66d3ad76d09cb700b0e3021436e810 = L.marker(
+                [39.933, 116.47],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_4529860c67c9316698bfb7a9ebf0a1b5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_dda1117d613424640afe68db4f8ef9c3 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_b0f042efc91797dc329f840ca06d832d = $(`<div id="html_b0f042efc91797dc329f840ca06d832d" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Nongzhanguan<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 79.25 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_dda1117d613424640afe68db4f8ef9c3.setContent(html_b0f042efc91797dc329f840ca06d832d);
+            
+        
+
+        marker_8d66d3ad76d09cb700b0e3021436e810.bindPopup(popup_dda1117d613424640afe68db4f8ef9c3)
+        ;
+
+        
+    
+    
+            marker_8d66d3ad76d09cb700b0e3021436e810.bindTooltip(
+                `<div>
+                     Nongzhanguan | Musim Semi | 79.3 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_8d66d3ad76d09cb700b0e3021436e810.setIcon(icon_4529860c67c9316698bfb7a9ebf0a1b5);
+            
+    
+            var marker_dd9c97c69e5d89c5d4dee019dae2371b = L.marker(
+                [40.126, 116.655],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_309c99bc86a93e1bcd936ba727769000 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e085ad502a1a8656031d1b0a976c5791 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_771804103e27e40b887ab52f233db029 = $(`<div id="html_771804103e27e40b887ab52f233db029" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Shunyi<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 78.62 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_e085ad502a1a8656031d1b0a976c5791.setContent(html_771804103e27e40b887ab52f233db029);
+            
+        
+
+        marker_dd9c97c69e5d89c5d4dee019dae2371b.bindPopup(popup_e085ad502a1a8656031d1b0a976c5791)
+        ;
+
+        
+    
+    
+            marker_dd9c97c69e5d89c5d4dee019dae2371b.bindTooltip(
+                `<div>
+                     Shunyi | Musim Semi | 78.6 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_dd9c97c69e5d89c5d4dee019dae2371b.setIcon(icon_309c99bc86a93e1bcd936ba727769000);
+            
+    
+            var marker_ed3f352e37d9c18615393a4c75ffd6ce = L.marker(
+                [39.876, 116.417],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_cc2394be109583dd71a4cfaaab8074ae = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c60ae21073b4a2b5f54492b230115b65 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_6dd622266596863a9bff11e9d1f27252 = $(`<div id="html_6dd622266596863a9bff11e9d1f27252" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Tiantan<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 75.89 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_c60ae21073b4a2b5f54492b230115b65.setContent(html_6dd622266596863a9bff11e9d1f27252);
+            
+        
+
+        marker_ed3f352e37d9c18615393a4c75ffd6ce.bindPopup(popup_c60ae21073b4a2b5f54492b230115b65)
+        ;
+
+        
+    
+    
+            marker_ed3f352e37d9c18615393a4c75ffd6ce.bindTooltip(
+                `<div>
+                     Tiantan | Musim Semi | 75.9 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ed3f352e37d9c18615393a4c75ffd6ce.setIcon(icon_cc2394be109583dd71a4cfaaab8074ae);
+            
+    
+            var marker_ab0fbcdfda3943226b0ab2d52833b6a2 = L.marker(
+                [39.999, 116.288],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_8e26c5a88721fc8e8bf5c01d265ba3c5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2107d8ad84c599d9cf0c7e50a14c2d4b = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_852d75b4a7d7b6e982410e7c1268968d = $(`<div id="html_852d75b4a7d7b6e982410e7c1268968d" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Wanliu<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 79.34 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_2107d8ad84c599d9cf0c7e50a14c2d4b.setContent(html_852d75b4a7d7b6e982410e7c1268968d);
+            
+        
+
+        marker_ab0fbcdfda3943226b0ab2d52833b6a2.bindPopup(popup_2107d8ad84c599d9cf0c7e50a14c2d4b)
+        ;
+
+        
+    
+    
+            marker_ab0fbcdfda3943226b0ab2d52833b6a2.bindTooltip(
+                `<div>
+                     Wanliu | Musim Semi | 79.3 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ab0fbcdfda3943226b0ab2d52833b6a2.setIcon(icon_8e26c5a88721fc8e8bf5c01d265ba3c5);
+            
+    
+            var marker_d5313ea1c9b36049c10090a0accc24e4 = L.marker(
+                [39.882, 116.34],
+                {
+}
+            ).addTo(feature_group_ff76aabf027e2316df1e9529fdce8bb4);
+        
+    
+            var icon_3c4f512e01156325d2f9599c38cedfc2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7027c214e4da778180521b90d56cdb80 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_271c403feba8b7806668117ab477c001 = $(`<div id="html_271c403feba8b7806668117ab477c001" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Wanshouxigong<br>         <b>Musim:</b> Musim Semi<br>         <b>Rata-rata PM2.5:</b> 79.12 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_7027c214e4da778180521b90d56cdb80.setContent(html_271c403feba8b7806668117ab477c001);
+            
+        
+
+        marker_d5313ea1c9b36049c10090a0accc24e4.bindPopup(popup_7027c214e4da778180521b90d56cdb80)
+        ;
+
+        
+    
+    
+            marker_d5313ea1c9b36049c10090a0accc24e4.bindTooltip(
+                `<div>
+                     Wanshouxigong | Musim Semi | 79.1 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_d5313ea1c9b36049c10090a0accc24e4.setIcon(icon_3c4f512e01156325d2f9599c38cedfc2);
+            
+    
+            feature_group_ff76aabf027e2316df1e9529fdce8bb4.addTo(map_d2a4bdc3a2b947bc4fb37d16e6da0d90);
+        
+    
+            var feature_group_e86e1b608553b404455311349191156d = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_22ab0b34c74fc7f46da4bce8f58d88ca = L.marker(
+                [39.909, 116.397],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_f65e18af154e4e9e17fe0acfaca1da6b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6cec73e69eceac6994148ed30eabaac7 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_1aeca8bf95b67e69ad4724cb6a455bf4 = $(`<div id="html_1aeca8bf95b67e69ad4724cb6a455bf4" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Aotizhongxin<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 67.32 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_6cec73e69eceac6994148ed30eabaac7.setContent(html_1aeca8bf95b67e69ad4724cb6a455bf4);
+            
+        
+
+        marker_22ab0b34c74fc7f46da4bce8f58d88ca.bindPopup(popup_6cec73e69eceac6994148ed30eabaac7)
+        ;
+
+        
+    
+    
+            marker_22ab0b34c74fc7f46da4bce8f58d88ca.bindTooltip(
+                `<div>
+                     Aotizhongxin | Musim Panas | 67.3 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_22ab0b34c74fc7f46da4bce8f58d88ca.setIcon(icon_f65e18af154e4e9e17fe0acfaca1da6b);
+            
+    
+            var marker_6f147e959041cc4fa73cd9edae9cdc9c = L.marker(
+                [40.218, 116.231],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_971d076b363f949da40a0151b4a4c8b9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_9721bd86afa33340b7c09119487e5ebc = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_d41e2c3fd578b07051002f7982a40f3e = $(`<div id="html_d41e2c3fd578b07051002f7982a40f3e" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Changping<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 56.23 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_9721bd86afa33340b7c09119487e5ebc.setContent(html_d41e2c3fd578b07051002f7982a40f3e);
+            
+        
+
+        marker_6f147e959041cc4fa73cd9edae9cdc9c.bindPopup(popup_9721bd86afa33340b7c09119487e5ebc)
+        ;
+
+        
+    
+    
+            marker_6f147e959041cc4fa73cd9edae9cdc9c.bindTooltip(
+                `<div>
+                     Changping | Musim Panas | 56.2 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6f147e959041cc4fa73cd9edae9cdc9c.setIcon(icon_971d076b363f949da40a0151b4a4c8b9);
+            
+    
+            var marker_7ae3a8a4616094a622af39b7972b8b87 = L.marker(
+                [40.292, 116.225],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_771f72578b08b6582bb730eab7336cff = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d8c80cbfa8af65e8b917382fc07b4dbb = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_d4cccf794dfab6b468d787ac75027228 = $(`<div id="html_d4cccf794dfab6b468d787ac75027228" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Dingling<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 53.63 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_d8c80cbfa8af65e8b917382fc07b4dbb.setContent(html_d4cccf794dfab6b468d787ac75027228);
+            
+        
+
+        marker_7ae3a8a4616094a622af39b7972b8b87.bindPopup(popup_d8c80cbfa8af65e8b917382fc07b4dbb)
+        ;
+
+        
+    
+    
+            marker_7ae3a8a4616094a622af39b7972b8b87.bindTooltip(
+                `<div>
+                     Dingling | Musim Panas | 53.6 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_7ae3a8a4616094a622af39b7972b8b87.setIcon(icon_771f72578b08b6582bb730eab7336cff);
+            
+    
+            var marker_8fdf6c5d0c13f9dc51dfca7d6e5a5e44 = L.marker(
+                [39.929, 116.417],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_32dd96f3e33f10b976ce8e498eba9022 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3840a6c81c94ae2433818bc4c5cd7659 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_ed14958dc945a6e8bc260b1690d57b4f = $(`<div id="html_ed14958dc945a6e8bc260b1690d57b4f" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Dongsi<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 71.22 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_3840a6c81c94ae2433818bc4c5cd7659.setContent(html_ed14958dc945a6e8bc260b1690d57b4f);
+            
+        
+
+        marker_8fdf6c5d0c13f9dc51dfca7d6e5a5e44.bindPopup(popup_3840a6c81c94ae2433818bc4c5cd7659)
+        ;
+
+        
+    
+    
+            marker_8fdf6c5d0c13f9dc51dfca7d6e5a5e44.bindTooltip(
+                `<div>
+                     Dongsi | Musim Panas | 71.2 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_8fdf6c5d0c13f9dc51dfca7d6e5a5e44.setIcon(icon_32dd96f3e33f10b976ce8e498eba9022);
+            
+    
+            var marker_51e2f85524c364ba10beb97a34d55ed8 = L.marker(
+                [39.933, 116.362],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_fcf963340a2933db0205c00e2f31a9c8 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4be496f8490b336cfb231b8288856778 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_5c3f0017d099ec34ef92fe23f2243e81 = $(`<div id="html_5c3f0017d099ec34ef92fe23f2243e81" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Guanyuan<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 68.98 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_4be496f8490b336cfb231b8288856778.setContent(html_5c3f0017d099ec34ef92fe23f2243e81);
+            
+        
+
+        marker_51e2f85524c364ba10beb97a34d55ed8.bindPopup(popup_4be496f8490b336cfb231b8288856778)
+        ;
+
+        
+    
+    
+            marker_51e2f85524c364ba10beb97a34d55ed8.bindTooltip(
+                `<div>
+                     Guanyuan | Musim Panas | 69.0 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_51e2f85524c364ba10beb97a34d55ed8.setIcon(icon_fcf963340a2933db0205c00e2f31a9c8);
+            
+    
+            var marker_7557735bd0e3ee1b598f2d4a2b99247c = L.marker(
+                [39.914, 116.188],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_b7fe252ba3c588b7e89a5559935ec5b5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_33cf6dac639be58567eadd69b1da9d4d = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_b37f3ea6a78f0fb4369ba636a2749c7f = $(`<div id="html_b37f3ea6a78f0fb4369ba636a2749c7f" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Gucheng<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 65.82 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_33cf6dac639be58567eadd69b1da9d4d.setContent(html_b37f3ea6a78f0fb4369ba636a2749c7f);
+            
+        
+
+        marker_7557735bd0e3ee1b598f2d4a2b99247c.bindPopup(popup_33cf6dac639be58567eadd69b1da9d4d)
+        ;
+
+        
+    
+    
+            marker_7557735bd0e3ee1b598f2d4a2b99247c.bindTooltip(
+                `<div>
+                     Gucheng | Musim Panas | 65.8 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_7557735bd0e3ee1b598f2d4a2b99247c.setIcon(icon_b7fe252ba3c588b7e89a5559935ec5b5);
+            
+    
+            var marker_24c30f374c5313d215f9b6387c506c96 = L.marker(
+                [40.364, 116.631],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_06dba9e55e1cb67e071bfee074f46afa = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0be56edc3a770ab6236be40ffab4b508 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_92db25e986fd8d40db60b7d3de6f2c22 = $(`<div id="html_92db25e986fd8d40db60b7d3de6f2c22" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Huairou<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 56.78 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_0be56edc3a770ab6236be40ffab4b508.setContent(html_92db25e986fd8d40db60b7d3de6f2c22);
+            
+        
+
+        marker_24c30f374c5313d215f9b6387c506c96.bindPopup(popup_0be56edc3a770ab6236be40ffab4b508)
+        ;
+
+        
+    
+    
+            marker_24c30f374c5313d215f9b6387c506c96.bindTooltip(
+                `<div>
+                     Huairou | Musim Panas | 56.8 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_24c30f374c5313d215f9b6387c506c96.setIcon(icon_06dba9e55e1cb67e071bfee074f46afa);
+            
+    
+            var marker_3fcaaf136e3bd8b4f0c6c9473fea65c9 = L.marker(
+                [39.933, 116.47],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_e9a99a3100ccf4ee8603ef5bec89a995 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_10efa01ddb4b93ef1c88dd57f41fa44c = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_c84dc1f71c3abec8472acb68175a9e65 = $(`<div id="html_c84dc1f71c3abec8472acb68175a9e65" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Nongzhanguan<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 66.45 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_10efa01ddb4b93ef1c88dd57f41fa44c.setContent(html_c84dc1f71c3abec8472acb68175a9e65);
+            
+        
+
+        marker_3fcaaf136e3bd8b4f0c6c9473fea65c9.bindPopup(popup_10efa01ddb4b93ef1c88dd57f41fa44c)
+        ;
+
+        
+    
+    
+            marker_3fcaaf136e3bd8b4f0c6c9473fea65c9.bindTooltip(
+                `<div>
+                     Nongzhanguan | Musim Panas | 66.4 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_3fcaaf136e3bd8b4f0c6c9473fea65c9.setIcon(icon_e9a99a3100ccf4ee8603ef5bec89a995);
+            
+    
+            var marker_aacccb710cf6dfdca425706ba2708c1f = L.marker(
+                [40.126, 116.655],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_135745bd90f4d10360a36c0c61a65fd1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5bac0d8c3b59ab0de57bdbb5fa71e7bd = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_8327794c51f921ba4545b204967d9f39 = $(`<div id="html_8327794c51f921ba4545b204967d9f39" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Shunyi<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 64.83 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_5bac0d8c3b59ab0de57bdbb5fa71e7bd.setContent(html_8327794c51f921ba4545b204967d9f39);
+            
+        
+
+        marker_aacccb710cf6dfdca425706ba2708c1f.bindPopup(popup_5bac0d8c3b59ab0de57bdbb5fa71e7bd)
+        ;
+
+        
+    
+    
+            marker_aacccb710cf6dfdca425706ba2708c1f.bindTooltip(
+                `<div>
+                     Shunyi | Musim Panas | 64.8 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_aacccb710cf6dfdca425706ba2708c1f.setIcon(icon_135745bd90f4d10360a36c0c61a65fd1);
+            
+    
+            var marker_7f4d3a40cd0b919bf4e5a71e7440a09a = L.marker(
+                [39.876, 116.417],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_21748bd06ea6af5b6760605b01842826 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_327860794278152080e9eaf02e1dc3ab = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_7654ab427ad8176705fae2061382d0f0 = $(`<div id="html_7654ab427ad8176705fae2061382d0f0" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Tiantan<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 68.05 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_327860794278152080e9eaf02e1dc3ab.setContent(html_7654ab427ad8176705fae2061382d0f0);
+            
+        
+
+        marker_7f4d3a40cd0b919bf4e5a71e7440a09a.bindPopup(popup_327860794278152080e9eaf02e1dc3ab)
+        ;
+
+        
+    
+    
+            marker_7f4d3a40cd0b919bf4e5a71e7440a09a.bindTooltip(
+                `<div>
+                     Tiantan | Musim Panas | 68.1 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_7f4d3a40cd0b919bf4e5a71e7440a09a.setIcon(icon_21748bd06ea6af5b6760605b01842826);
+            
+    
+            var marker_9c25f1ee7cfdf904eebd9c5ad868c846 = L.marker(
+                [39.999, 116.288],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_d6a8f109ad090e1475759a0a778833a1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1a184922e8e73f83cdf6f8fd9e52f482 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_21cdb3a94f1d9d609f72b2633b0fee24 = $(`<div id="html_21cdb3a94f1d9d609f72b2633b0fee24" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Wanliu<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 68.64 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_1a184922e8e73f83cdf6f8fd9e52f482.setContent(html_21cdb3a94f1d9d609f72b2633b0fee24);
+            
+        
+
+        marker_9c25f1ee7cfdf904eebd9c5ad868c846.bindPopup(popup_1a184922e8e73f83cdf6f8fd9e52f482)
+        ;
+
+        
+    
+    
+            marker_9c25f1ee7cfdf904eebd9c5ad868c846.bindTooltip(
+                `<div>
+                     Wanliu | Musim Panas | 68.6 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_9c25f1ee7cfdf904eebd9c5ad868c846.setIcon(icon_d6a8f109ad090e1475759a0a778833a1);
+            
+    
+            var marker_15e02bea38885b47082e9708a639cab2 = L.marker(
+                [39.882, 116.34],
+                {
+}
+            ).addTo(feature_group_e86e1b608553b404455311349191156d);
+        
+    
+            var icon_c7d08d06759d6a882e263014545b358f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "sun",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f355ee6c28790750d2b9e0a4e8c4c8e5 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_a9d1cb9f20b78899458ab3adcc537e0c = $(`<div id="html_a9d1cb9f20b78899458ab3adcc537e0c" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Wanshouxigong<br>         <b>Musim:</b> Musim Panas<br>         <b>Rata-rata PM2.5:</b> 66.32 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_f355ee6c28790750d2b9e0a4e8c4c8e5.setContent(html_a9d1cb9f20b78899458ab3adcc537e0c);
+            
+        
+
+        marker_15e02bea38885b47082e9708a639cab2.bindPopup(popup_f355ee6c28790750d2b9e0a4e8c4c8e5)
+        ;
+
+        
+    
+    
+            marker_15e02bea38885b47082e9708a639cab2.bindTooltip(
+                `<div>
+                     Wanshouxigong | Musim Panas | 66.3 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_15e02bea38885b47082e9708a639cab2.setIcon(icon_c7d08d06759d6a882e263014545b358f);
+            
+    
+            feature_group_e86e1b608553b404455311349191156d.addTo(map_d2a4bdc3a2b947bc4fb37d16e6da0d90);
+        
+    
+            var feature_group_b45230c0003ca5be0f2670141f388a0e = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_802f84b8cc960abd4abd4f01896cf0ff = L.marker(
+                [39.909, 116.397],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_848f099002b6e7c23b92cd2701b132e3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e5db79cb9bcdc31ed615022558f8c13c = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_bb577b7f984f61c2ad38d6ba0c2c9d8f = $(`<div id="html_bb577b7f984f61c2ad38d6ba0c2c9d8f" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Aotizhongxin<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 86.84 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_e5db79cb9bcdc31ed615022558f8c13c.setContent(html_bb577b7f984f61c2ad38d6ba0c2c9d8f);
+            
+        
+
+        marker_802f84b8cc960abd4abd4f01896cf0ff.bindPopup(popup_e5db79cb9bcdc31ed615022558f8c13c)
+        ;
+
+        
+    
+    
+            marker_802f84b8cc960abd4abd4f01896cf0ff.bindTooltip(
+                `<div>
+                     Aotizhongxin | Musim Gugur | 86.8 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_802f84b8cc960abd4abd4f01896cf0ff.setIcon(icon_848f099002b6e7c23b92cd2701b132e3);
+            
+    
+            var marker_131db67d389311f8c5554b5f9907e3d8 = L.marker(
+                [40.218, 116.231],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_cd36167e01c905aabc8583a93abeb9c3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_ce6e96952911dbe6561f5c027833a2ec = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_e522b90686cf8877d1872587b5785a6f = $(`<div id="html_e522b90686cf8877d1872587b5785a6f" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Changping<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 71.73 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_ce6e96952911dbe6561f5c027833a2ec.setContent(html_e522b90686cf8877d1872587b5785a6f);
+            
+        
+
+        marker_131db67d389311f8c5554b5f9907e3d8.bindPopup(popup_ce6e96952911dbe6561f5c027833a2ec)
+        ;
+
+        
+    
+    
+            marker_131db67d389311f8c5554b5f9907e3d8.bindTooltip(
+                `<div>
+                     Changping | Musim Gugur | 71.7 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_131db67d389311f8c5554b5f9907e3d8.setIcon(icon_cd36167e01c905aabc8583a93abeb9c3);
+            
+    
+            var marker_ac0ff61c4e2978475db937d98eca29e0 = L.marker(
+                [40.292, 116.225],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_7299aca955c4d096eb8d21e09b59f495 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_85f71d0a42d0182b73b5f7a5473e331c = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_419cdf03b14c692dfaedeab6f5280e28 = $(`<div id="html_419cdf03b14c692dfaedeab6f5280e28" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Dingling<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 68.23 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_85f71d0a42d0182b73b5f7a5473e331c.setContent(html_419cdf03b14c692dfaedeab6f5280e28);
+            
+        
+
+        marker_ac0ff61c4e2978475db937d98eca29e0.bindPopup(popup_85f71d0a42d0182b73b5f7a5473e331c)
+        ;
+
+        
+    
+    
+            marker_ac0ff61c4e2978475db937d98eca29e0.bindTooltip(
+                `<div>
+                     Dingling | Musim Gugur | 68.2 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ac0ff61c4e2978475db937d98eca29e0.setIcon(icon_7299aca955c4d096eb8d21e09b59f495);
+            
+    
+            var marker_58f0e7f753c0bb04b7744a51346022b9 = L.marker(
+                [39.929, 116.417],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_b9fba0b8bb7c4ee6dc8ff569c969e062 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3f2541a2302a90a42afd3741acb60303 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_bdeb79c6792ece994c817bfe3dec3f67 = $(`<div id="html_bdeb79c6792ece994c817bfe3dec3f67" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Dongsi<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 88.22 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_3f2541a2302a90a42afd3741acb60303.setContent(html_bdeb79c6792ece994c817bfe3dec3f67);
+            
+        
+
+        marker_58f0e7f753c0bb04b7744a51346022b9.bindPopup(popup_3f2541a2302a90a42afd3741acb60303)
+        ;
+
+        
+    
+    
+            marker_58f0e7f753c0bb04b7744a51346022b9.bindTooltip(
+                `<div>
+                     Dongsi | Musim Gugur | 88.2 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_58f0e7f753c0bb04b7744a51346022b9.setIcon(icon_b9fba0b8bb7c4ee6dc8ff569c969e062);
+            
+    
+            var marker_d6552447d666357f0853fd2c1a70e035 = L.marker(
+                [39.933, 116.362],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_131fd990c63572a70a137a1f8e16640d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_8b2037f5fd26ae330754bf0c12808e34 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_6201ae024f3a701a1e17fdd7e3f9ebec = $(`<div id="html_6201ae024f3a701a1e17fdd7e3f9ebec" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Guanyuan<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 87.27 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_8b2037f5fd26ae330754bf0c12808e34.setContent(html_6201ae024f3a701a1e17fdd7e3f9ebec);
+            
+        
+
+        marker_d6552447d666357f0853fd2c1a70e035.bindPopup(popup_8b2037f5fd26ae330754bf0c12808e34)
+        ;
+
+        
+    
+    
+            marker_d6552447d666357f0853fd2c1a70e035.bindTooltip(
+                `<div>
+                     Guanyuan | Musim Gugur | 87.3 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_d6552447d666357f0853fd2c1a70e035.setIcon(icon_131fd990c63572a70a137a1f8e16640d);
+            
+    
+            var marker_959b8be9c537a32258e40df315a80e3c = L.marker(
+                [39.914, 116.188],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_4e2f51cd8673430e5319837422e54c07 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_55f6a6714c56489ea3527d9812d7ee03 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_9ab97ddd366d3b5116dd1e4517f32e04 = $(`<div id="html_9ab97ddd366d3b5116dd1e4517f32e04" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Gucheng<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 88.37 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_55f6a6714c56489ea3527d9812d7ee03.setContent(html_9ab97ddd366d3b5116dd1e4517f32e04);
+            
+        
+
+        marker_959b8be9c537a32258e40df315a80e3c.bindPopup(popup_55f6a6714c56489ea3527d9812d7ee03)
+        ;
+
+        
+    
+    
+            marker_959b8be9c537a32258e40df315a80e3c.bindTooltip(
+                `<div>
+                     Gucheng | Musim Gugur | 88.4 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_959b8be9c537a32258e40df315a80e3c.setIcon(icon_4e2f51cd8673430e5319837422e54c07);
+            
+    
+            var marker_15be686bda6deb263ba92c8397d5dbe3 = L.marker(
+                [40.364, 116.631],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_ad703a0f78b0082673f373154ab47ec0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b7379e6ce1bfce14c8ada803f838a75e = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_2b8a753c68e82fedfb7d266d405bcccc = $(`<div id="html_2b8a753c68e82fedfb7d266d405bcccc" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Huairou<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 69.91 µg/m³<br>         <b>Kategori:</b> Sedang         </div>`)[0];
+                popup_b7379e6ce1bfce14c8ada803f838a75e.setContent(html_2b8a753c68e82fedfb7d266d405bcccc);
+            
+        
+
+        marker_15be686bda6deb263ba92c8397d5dbe3.bindPopup(popup_b7379e6ce1bfce14c8ada803f838a75e)
+        ;
+
+        
+    
+    
+            marker_15be686bda6deb263ba92c8397d5dbe3.bindTooltip(
+                `<div>
+                     Huairou | Musim Gugur | 69.9 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_15be686bda6deb263ba92c8397d5dbe3.setIcon(icon_ad703a0f78b0082673f373154ab47ec0);
+            
+    
+            var marker_338a0f1310d18e7837380d3b14ae2c47 = L.marker(
+                [39.933, 116.47],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_1a99e4bdcb59db2fc0773407bfd8f487 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_df47ff1b7aa57627477cdafff3f447b4 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_c1f0cfc415b1e3a840cf0abdd5541c04 = $(`<div id="html_c1f0cfc415b1e3a840cf0abdd5541c04" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Nongzhanguan<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 90.18 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_df47ff1b7aa57627477cdafff3f447b4.setContent(html_c1f0cfc415b1e3a840cf0abdd5541c04);
+            
+        
+
+        marker_338a0f1310d18e7837380d3b14ae2c47.bindPopup(popup_df47ff1b7aa57627477cdafff3f447b4)
+        ;
+
+        
+    
+    
+            marker_338a0f1310d18e7837380d3b14ae2c47.bindTooltip(
+                `<div>
+                     Nongzhanguan | Musim Gugur | 90.2 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_338a0f1310d18e7837380d3b14ae2c47.setIcon(icon_1a99e4bdcb59db2fc0773407bfd8f487);
+            
+    
+            var marker_4d64be1ed56452c1358f3f21d66111ea = L.marker(
+                [40.126, 116.655],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_ab89900acac32e829d5e69f803ec1ee5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_74957d9686e296efc75f9c82bb2d7ae8 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_ff2794fae30954a5f1ba96c2feea9e5e = $(`<div id="html_ff2794fae30954a5f1ba96c2feea9e5e" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Shunyi<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 79.35 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_74957d9686e296efc75f9c82bb2d7ae8.setContent(html_ff2794fae30954a5f1ba96c2feea9e5e);
+            
+        
+
+        marker_4d64be1ed56452c1358f3f21d66111ea.bindPopup(popup_74957d9686e296efc75f9c82bb2d7ae8)
+        ;
+
+        
+    
+    
+            marker_4d64be1ed56452c1358f3f21d66111ea.bindTooltip(
+                `<div>
+                     Shunyi | Musim Gugur | 79.3 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_4d64be1ed56452c1358f3f21d66111ea.setIcon(icon_ab89900acac32e829d5e69f803ec1ee5);
+            
+    
+            var marker_6d45887af1597d6a12ab03299f833c5b = L.marker(
+                [39.876, 116.417],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_836eeaceed6cbb4141bb28f85a8cc464 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a2a38f13d8f7ea5aa0f0e11cdf6fda82 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_d973a49c159c8201834fe872c1923c68 = $(`<div id="html_d973a49c159c8201834fe872c1923c68" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Tiantan<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 83.94 µg/m³<br>         <b>Kategori:</b> Tinggi         </div>`)[0];
+                popup_a2a38f13d8f7ea5aa0f0e11cdf6fda82.setContent(html_d973a49c159c8201834fe872c1923c68);
+            
+        
+
+        marker_6d45887af1597d6a12ab03299f833c5b.bindPopup(popup_a2a38f13d8f7ea5aa0f0e11cdf6fda82)
+        ;
+
+        
+    
+    
+            marker_6d45887af1597d6a12ab03299f833c5b.bindTooltip(
+                `<div>
+                     Tiantan | Musim Gugur | 83.9 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6d45887af1597d6a12ab03299f833c5b.setIcon(icon_836eeaceed6cbb4141bb28f85a8cc464);
+            
+    
+            var marker_5f6db23a90391ad2b94bd7287c6213b3 = L.marker(
+                [39.999, 116.288],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_24e30ddd16707a5bf94e6d751d025662 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_67a1917d3e2201933527dab0d7734081 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_4b3e20b3159894d34d59d81b3c1f2468 = $(`<div id="html_4b3e20b3159894d34d59d81b3c1f2468" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Wanliu<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 85.92 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_67a1917d3e2201933527dab0d7734081.setContent(html_4b3e20b3159894d34d59d81b3c1f2468);
+            
+        
+
+        marker_5f6db23a90391ad2b94bd7287c6213b3.bindPopup(popup_67a1917d3e2201933527dab0d7734081)
+        ;
+
+        
+    
+    
+            marker_5f6db23a90391ad2b94bd7287c6213b3.bindTooltip(
+                `<div>
+                     Wanliu | Musim Gugur | 85.9 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_5f6db23a90391ad2b94bd7287c6213b3.setIcon(icon_24e30ddd16707a5bf94e6d751d025662);
+            
+    
+            var marker_ca84003c0e1dd28cc4e594e5dabaa87e = L.marker(
+                [39.882, 116.34],
+                {
+}
+            ).addTo(feature_group_b45230c0003ca5be0f2670141f388a0e);
+        
+    
+            var icon_3acc424e46aa1cea906779f5c87f9364 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "tree",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_340b9cd9ad43729a02daa70d05141dd5 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_5549338ecf7050bdfb358cc1b7800f91 = $(`<div id="html_5549338ecf7050bdfb358cc1b7800f91" style="width: 100.0%; height: 100.0%;">         <b>Stasiun:</b> Wanshouxigong<br>         <b>Musim:</b> Musim Gugur<br>         <b>Rata-rata PM2.5:</b> 86.60 µg/m³<br>         <b>Kategori:</b> Sangat Tinggi         </div>`)[0];
+                popup_340b9cd9ad43729a02daa70d05141dd5.setContent(html_5549338ecf7050bdfb358cc1b7800f91);
+            
+        
+
+        marker_ca84003c0e1dd28cc4e594e5dabaa87e.bindPopup(popup_340b9cd9ad43729a02daa70d05141dd5)
+        ;
+
+        
+    
+    
+            marker_ca84003c0e1dd28cc4e594e5dabaa87e.bindTooltip(
+                `<div>
+                     Wanshouxigong | Musim Gugur | 86.6 µg/m³
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ca84003c0e1dd28cc4e594e5dabaa87e.setIcon(icon_3acc424e46aa1cea906779f5c87f9364);
+            
+    
+            feature_group_b45230c0003ca5be0f2670141f388a0e.addTo(map_d2a4bdc3a2b947bc4fb37d16e6da0d90);
+        
+    
+            var layer_control_6348d26746d4a6b5048c23d91e3551d1_layers = {
+                base_layers : {
+                    "cartodbpositron" : tile_layer_16625592e0291f6f7eec5e621d87a143,
+                },
+                overlays :  {
+                    "Musim Dingin" : feature_group_16661fe17e2aee8d5dee53b020298c63,
+                    "Musim Semi" : feature_group_ff76aabf027e2316df1e9529fdce8bb4,
+                    "Musim Panas" : feature_group_e86e1b608553b404455311349191156d,
+                    "Musim Gugur" : feature_group_b45230c0003ca5be0f2670141f388a0e,
+                },
+            };
+            let layer_control_6348d26746d4a6b5048c23d91e3551d1 = L.control.layers(
+                layer_control_6348d26746d4a6b5048c23d91e3551d1_layers.base_layers,
+                layer_control_6348d26746d4a6b5048c23d91e3551d1_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_d2a4bdc3a2b947bc4fb37d16e6da0d90);
+
+        
+    
+            tile_layer_16625592e0291f6f7eec5e621d87a143.addTo(map_d2a4bdc3a2b947bc4fb37d16e6da0d90);
+        
+    
+                marker_aacc37234754bf129d0e5733bfc76ce7.setIcon(icon_d34d901a42b334a40c01ca39abd0d05e);
+            
+    
+                marker_6d89c9b9788356a030c35f202dfc4bfb.setIcon(icon_f44273e07d8953d0958fd8aaa6b23bae);
+            
+    
+                marker_b06bfcea93581f7142013d51db0a5d47.setIcon(icon_45abf1e879c38a46955c0e977637abd8);
+            
+    
+                marker_b7591a3072edb3a9786ff992ed441e1a.setIcon(icon_7fc948b6469309900a3b290fa577b257);
+            
+    
+                marker_1afdace0339daab9adde921314d0c84c.setIcon(icon_406660385a4e515156c643b6a2648df2);
+            
+    
+                marker_7ebb00a7af10ba33ca7356088f48dda1.setIcon(icon_7aaca005d21e5a6462bbe02430eaf3c9);
+            
+    
+                marker_79c33df8728c8b61d6d00bc310d7edab.setIcon(icon_969baf6ae671e6f45a73faa6d40d7dc7);
+            
+    
+                marker_9dfd6cb15cc020070c86fa87234531a1.setIcon(icon_649811bcd3b698ff960cabfb404617d7);
+            
+    
+                marker_06784cad164e83294c6af6320aa32619.setIcon(icon_ad8f7976080f4dd8d8b19af714ba8ca0);
+            
+    
+                marker_5d78303c88fddab73bf430978783c955.setIcon(icon_c3a5ffc9d4fb359911b8cc0549202b54);
+            
+    
+                marker_c925473d6e8b6ae2350127b3e915ac4e.setIcon(icon_2363c7d3bbb7260df8d6fdc636631ee7);
+            
+    
+                marker_66ff69690c60283ea34098c51c1aa1ae.setIcon(icon_4cdd900b950a02daa97854669c41a342);
+            
+    
+            feature_group_16661fe17e2aee8d5dee53b020298c63.addTo(map_d2a4bdc3a2b947bc4fb37d16e6da0d90);
+        
+    
+                marker_bfe6ef8d09e0f2197a8c022efb6a3e7c.setIcon(icon_f74d9f7613d9771d5beb522a759793e0);
+            
+    
+                marker_bf47096eaa438931a28aaa47e077efa0.setIcon(icon_e3d8c69d4abb6e711fc6e70a6b290a92);
+            
+    
+                marker_1320bc502fa50f9483f96bdfe08df226.setIcon(icon_43d5d1bf90907be290f73a673ae7e999);
+            
+    
+                marker_382945f4ff2c1170dc9d8cd6fbaa435c.setIcon(icon_c7e7810f757b255c544863a431e256c0);
+            
+    
+                marker_ec43b6364e1b2cb196f9e62e56ee2b56.setIcon(icon_ab6e310686bdc52a0e54ec86a050d6db);
+            
+    
+                marker_efffb2a6340ac7054e705b8dc88be232.setIcon(icon_f5807fc52ca53cad9b8dcfa201d00d04);
+            
+    
+                marker_ca0fd5b7d8996b3335c68dcd7032f580.setIcon(icon_4ad92943bd013018309f01bd4f4e6eb2);
+            
+    
+                marker_8d66d3ad76d09cb700b0e3021436e810.setIcon(icon_4529860c67c9316698bfb7a9ebf0a1b5);
+            
+    
+                marker_dd9c97c69e5d89c5d4dee019dae2371b.setIcon(icon_309c99bc86a93e1bcd936ba727769000);
+            
+    
+                marker_ed3f352e37d9c18615393a4c75ffd6ce.setIcon(icon_cc2394be109583dd71a4cfaaab8074ae);
+            
+    
+                marker_ab0fbcdfda3943226b0ab2d52833b6a2.setIcon(icon_8e26c5a88721fc8e8bf5c01d265ba3c5);
+            
+    
+                marker_d5313ea1c9b36049c10090a0accc24e4.setIcon(icon_3c4f512e01156325d2f9599c38cedfc2);
+            
+    
+            feature_group_ff76aabf027e2316df1e9529fdce8bb4.addTo(map_d2a4bdc3a2b947bc4fb37d16e6da0d90);
+        
+    
+                marker_22ab0b34c74fc7f46da4bce8f58d88ca.setIcon(icon_f65e18af154e4e9e17fe0acfaca1da6b);
+            
+    
+                marker_6f147e959041cc4fa73cd9edae9cdc9c.setIcon(icon_971d076b363f949da40a0151b4a4c8b9);
+            
+    
+                marker_7ae3a8a4616094a622af39b7972b8b87.setIcon(icon_771f72578b08b6582bb730eab7336cff);
+            
+    
+                marker_8fdf6c5d0c13f9dc51dfca7d6e5a5e44.setIcon(icon_32dd96f3e33f10b976ce8e498eba9022);
+            
+    
+                marker_51e2f85524c364ba10beb97a34d55ed8.setIcon(icon_fcf963340a2933db0205c00e2f31a9c8);
+            
+    
+                marker_7557735bd0e3ee1b598f2d4a2b99247c.setIcon(icon_b7fe252ba3c588b7e89a5559935ec5b5);
+            
+    
+                marker_24c30f374c5313d215f9b6387c506c96.setIcon(icon_06dba9e55e1cb67e071bfee074f46afa);
+            
+    
+                marker_3fcaaf136e3bd8b4f0c6c9473fea65c9.setIcon(icon_e9a99a3100ccf4ee8603ef5bec89a995);
+            
+    
+                marker_aacccb710cf6dfdca425706ba2708c1f.setIcon(icon_135745bd90f4d10360a36c0c61a65fd1);
+            
+    
+                marker_7f4d3a40cd0b919bf4e5a71e7440a09a.setIcon(icon_21748bd06ea6af5b6760605b01842826);
+            
+    
+                marker_9c25f1ee7cfdf904eebd9c5ad868c846.setIcon(icon_d6a8f109ad090e1475759a0a778833a1);
+            
+    
+                marker_15e02bea38885b47082e9708a639cab2.setIcon(icon_c7d08d06759d6a882e263014545b358f);
+            
+    
+            feature_group_e86e1b608553b404455311349191156d.addTo(map_d2a4bdc3a2b947bc4fb37d16e6da0d90);
+        
+    
+                marker_802f84b8cc960abd4abd4f01896cf0ff.setIcon(icon_848f099002b6e7c23b92cd2701b132e3);
+            
+    
+                marker_131db67d389311f8c5554b5f9907e3d8.setIcon(icon_cd36167e01c905aabc8583a93abeb9c3);
+            
+    
+                marker_ac0ff61c4e2978475db937d98eca29e0.setIcon(icon_7299aca955c4d096eb8d21e09b59f495);
+            
+    
+                marker_58f0e7f753c0bb04b7744a51346022b9.setIcon(icon_b9fba0b8bb7c4ee6dc8ff569c969e062);
+            
+    
+                marker_d6552447d666357f0853fd2c1a70e035.setIcon(icon_131fd990c63572a70a137a1f8e16640d);
+            
+    
+                marker_959b8be9c537a32258e40df315a80e3c.setIcon(icon_4e2f51cd8673430e5319837422e54c07);
+            
+    
+                marker_15be686bda6deb263ba92c8397d5dbe3.setIcon(icon_ad703a0f78b0082673f373154ab47ec0);
+            
+    
+                marker_338a0f1310d18e7837380d3b14ae2c47.setIcon(icon_1a99e4bdcb59db2fc0773407bfd8f487);
+            
+    
+                marker_4d64be1ed56452c1358f3f21d66111ea.setIcon(icon_ab89900acac32e829d5e69f803ec1ee5);
+            
+    
+                marker_6d45887af1597d6a12ab03299f833c5b.setIcon(icon_836eeaceed6cbb4141bb28f85a8cc464);
+            
+    
+                marker_5f6db23a90391ad2b94bd7287c6213b3.setIcon(icon_24e30ddd16707a5bf94e6d751d025662);
+            
+    
+                marker_ca84003c0e1dd28cc4e594e5dabaa87e.setIcon(icon_3acc424e46aa1cea906779f5c87f9364);
+            
+    
+            feature_group_b45230c0003ca5be0f2670141f388a0e.addTo(map_d2a4bdc3a2b947bc4fb37d16e6da0d90);
+        
+</script>
+</html>
