@@ -236,21 +236,21 @@ musim_icons = {
 
 # Fungsi kategorisasi warna untuk folium
 def categorize_color(pm25):
-    if pm25 < 70:
+    if pm25 < 65:
         return 'green'
-    elif pm25 < 85:
+    elif pm25 < 75:
         return 'orange'
     else:
         return 'red'
 
 # Fungsi kategori teks
 def get_pm25_label(pm25):
-    if pm25 < 70:
+    if pm25 < 65:
+        return 'Rendah'
+    elif pm25 < 75:
         return 'Sedang'
-    elif pm25 < 85:
-        return 'Tinggi'
     else:
-        return 'Sangat Tinggi'
+        return 'Tinggi'
 
 # Pilih musim dari UI
 musim_terpilih = st.radio("Pilih Musim:", list(musim_icons.keys()), horizontal=True)
@@ -284,34 +284,6 @@ for _, row in musim_data.iterrows():
         tooltip=f"{row['station']} | {row['PM2.5']:.1f} µg/m³",
         icon=folium.Icon(color=color, icon=icon_name, prefix='fa')
     ).add_to(m)
-
-# Legenda peta
-legend_html = """
-{% macro html(this, kwargs) %}
-<div style="
-    position: fixed; 
-    bottom: 50px; 
-    left: 50px; 
-    width: 240px;
-    background-color: white; 
-    border: 2px solid grey; 
-    z-index: 9999;
-    font-size: 14px; 
-    padding: 12px; 
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-    border-radius: 8px; 
-    line-height: 1.5;">
-<b>Legenda Kategori PM2.5</b><br>
-<i class="fa fa-map-marker fa-lg" style="color:green"></i> Sedang (&lt; 70)<br>
-<i class="fa fa-map-marker fa-lg" style="color:orange"></i> Tinggi (70–85)<br>
-<i class="fa fa-map-marker fa-lg" style="color:red"></i> Sangat Tinggi (&gt; 85)<br>
-</div>
-{% endmacro %}
-"""
-
-legend = MacroElement()
-legend._template = Template(legend_html)
-m.get_root().add_child(legend)
 
 # Tampilkan peta
 folium_static(m)
