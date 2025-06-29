@@ -6,9 +6,10 @@ import folium
 from streamlit_folium import folium_static
 from branca.element import Template, MacroElement
 
+
 # Load dataset
-df = pd.read_csv("dashboard/main_data.csv")
-avg_pm25_season_station = pd.read_csv("dashboard/data_geospasial_pm25_musiman.csv")
+df = pd.read_csv("main_data.csv")
+avg_pm25_season_station = pd.read_csv("data_geospasial_pm25_musiman.csv")
 
 # Sidebar untuk memilih stasiun
 location = st.sidebar.selectbox("Pilih Stasiun", df['station'].unique())
@@ -86,127 +87,152 @@ Visualisasi ini menampilkan rata-rata PM2.5 yang dihitung per stasiun pada tahun
 """)
 
 
-# ========== 3. Pengaruh Suhu dan Kelembapan terhadap PM2.5 ==========
-st.subheader("🌡️ Pengaruh Suhu dan Kelembapan terhadap PM2.5")
-fig, ax = plt.subplots(1, 2, figsize=(14, 6))
+# ========== 3. Scatter Plot PM2.5 vs Polutan ==========
+st.subheader("📈 Hubungan PM2.5 dengan CO, NO2, dan SO2 (Tahun per Tahun)")
 
-# Scatterplot Suhu vs PM2.5
-st.markdown(f"""
-📈 **Pola Persebaran PM2.5 terhadap Suhu dan Kelembapan**
+def plot_pm25_scatter_polutans(filtered_df, location, year):
+    df_station = filtered_df.copy()
+
+    # Pastikan kolom tanggal dan tahun tersedia
+    if 'date' not in df_station.columns and {'year', 'month', 'day'}.issubset(df_station.columns):
+        df_station['date'] = pd.to_datetime(df_station[['year', 'month', 'day']], errors='coerce')
+    if 'year' not in df_station.columns:
+        df_station['year'] = df_station['date'].dt.year
+
+    polutans = ['CO', 'NO2', 'SO2']
+    colors = ['#66c2a5', '#fc8d62', '#8da0cb']
+    line_colors = ['#82E0AA', '#F1948A', '#5DADE2']
+
+    insight_list = []
+
+    for i, polutan in enumerate(polutans):
+        fig, ax = plt.subplots(figsize=(8, 5))
+        sns.set(style="whitegrid")
+
+        if polutan in df_station.columns and 'PM2.5' in df_station.columns:
+            df_filtered = df_station[[polutan, 'PM2.5']].dropna()
+
+            if not df_filtered.empty and len(df_filtered) > 10:
+                sns.regplot(
+                    x=polutan, y='PM2.5',
+                    data=df_filtered,
+                    ax=ax,
+                    scatter_kws={'alpha': 0.3, 's': 25},
+                    line_kws={'color': line_colors[i]},
+                    color=colors[i],
+                    ci=95
+                )
+                ax.set_ylim(0, df_filtered['PM2.5'].max() + 50)
+                ax.set_title(f"{polutan} vs PM2.5 di {location} ({year})", fontsize=13)
+                ax.set_xlabel(polutan)
+                ax.set_ylabel("PM2.5 (µg/m³)")
+
+                # Simpan insight
+                korelasi = df_filtered.corr().loc['PM2.5', polutan]
+                if korelasi > 0.7:
+                    pola = "terlihat pola linear yang kuat"
+                elif korelasi > 0.5:
+                    pola = "terlihat kecenderungan meningkat seiring meningkatnya polutan"
+                elif korelasi > 0.3:
+                    pola = "hubungan cenderung menyebar tapi masih menunjukkan arah positif"
+                else:
+                    pola = "penyebaran titik sangat acak dan tidak menunjukkan arah yang jelas"
+
+                pengaruh = "berpengaruh cukup besar" if korelasi > 0.5 else "tidak terlalu berdampak"
+                insight_list.append(
+                    f"- Untuk **{polutan}**, {pola}. Hal ini menunjukkan bahwa perubahan nilai {polutan} {pengaruh} terhadap PM2.5."
+                )
+            else:
+                ax.text(0.5, 0.5, "Data tidak cukup", ha='center', va='center')
+                ax.set_axis_off()
+                insight_list.append(f"- Data untuk **{polutan}** tidak cukup untuk dianalisis secara visual.")
+
+        st.pyplot(fig)
+
+    # Insight ditampilkan SETELAH SEMUA grafik
+    st.markdown(f"""
+### 🔍 **Insight**
+
+Berdasarkan sebaran titik-titik pada grafik dan arah garis regresi linear, berikut adalah pengamatan untuk stasiun **{location}** pada tahun **{year}**:
 """)
+    for item in insight_list:
+        st.markdown(item)
 
-if 'TEMP' in filtered_df.columns and 'PM2.5' in filtered_df.columns:
-    sns.scatterplot(x='TEMP', y='PM2.5', data=filtered_df, ax=ax[0], color='blue')
-    ax[0].set_title(f"Pengaruh Suhu terhadap PM2.5 ({location}, {year})")
-    ax[0].set_xlabel("Suhu (°C)")
-    ax[0].set_ylabel("PM2.5 (µg/m³)")
 
-# Scatterplot Kelembapan vs PM2.5
-if 'DEWP' in filtered_df.columns and 'PM2.5' in filtered_df.columns:
-    sns.scatterplot(x='DEWP', y='PM2.5', data=filtered_df, ax=ax[1], color='green')
-    ax[1].set_title(f"Pengaruh Kelembapan terhadap PM2.5 ({location}, {year})")
-    ax[1].set_xlabel("Kelembapan (°C)")
-    ax[1].set_ylabel("PM2.5 (µg/m³)")
-
-st.pyplot(fig)
-
-# Hitung korelasi
-corr_temp = filtered_df[['TEMP', 'PM2.5']].corr().iloc[0, 1]
-corr_dewp = filtered_df[['DEWP', 'PM2.5']].corr().iloc[0, 1]
-
-# Interpretasi korelasi
-def interpret_corr(corr, var_name):
-    abs_corr = abs(corr)
-    if abs_corr > 0.7:
-        strength = "sangat kuat"
-    elif abs_corr > 0.4:
-        strength = "kuat"
-    elif abs_corr > 0.2:
-        strength = "cukup"
-    elif abs_corr > 0.1:
-        strength = "lemah"
-    else:
-        strength = "sangat lemah atau tidak ada"
-
-    direction = "positif" if corr > 0 else "negatif"
-    trend = "ikut meningkat" if corr > 0 else "menurun"
-
-    signif = "tidak signifikan" if abs_corr <= 0.2 else "mungkin signifikan"
-
-    return (
-        f"Korelasi antara **{var_name}** dan PM2.5 adalah **{direction}** "
-        f"dengan kekuatan **{strength}** (**{corr:.2f}**), "
-        f"yang menunjukkan hubungan {signif}. "
-        f"Secara umum, titik data tersebar **{('acak' if abs_corr < 0.2 else 'sedikit membentuk pola')}**, "
-        f"menandakan bahwa saat {var_name.lower()} meningkat, PM2.5 cenderung {trend}."
-    )
-    
-# Nilai suhu dan kelembapan dinamis
-temp_min = filtered_df['TEMP'].min()
-temp_max = filtered_df['TEMP'].max()
-temp_threshold = 25  # nilai ambang yang akan kita bandingkan (bisa juga median)
-
-dewp_min = filtered_df['DEWP'].min()
-dewp_max = filtered_df['DEWP'].max()
-dewp_range_high_pm = filtered_df.loc[filtered_df['PM2.5'] > 400, 'DEWP']
-
-# Dapatkan rentang kelembapan saat PM2.5 tinggi (>400), jika ada
-if not dewp_range_high_pm.empty:
-    dewp_high_min = dewp_range_high_pm.min()
-    dewp_high_max = dewp_range_high_pm.max()
-    dewp_high_str = f"{dewp_high_min:.1f}–{dewp_high_max:.1f}°C"
+# Jalankan jika data tersedia
+if not filtered_df.empty:
+    plot_pm25_scatter_polutans(filtered_df, location, year)
 else:
-    dewp_high_str = "-"
+    st.warning("Silakan pilih stasiun dan tahun untuk melihat hubungan PM2.5 dan polutan.")
+
+
+
+
+# ========== 4. Korelasi PM2.5 dengan Polutan Lain ==========
+st.subheader("📊 Korelasi PM2.5 dengan Polutan Lain (CO, NO2, SO2)")
+
+def plot_correlation_pm25_with_polutants(filtered_df, location, year):
+    df_corr = filtered_df[['PM2.5', 'CO', 'NO2', 'SO2']].dropna()
+
+    if df_corr.empty or df_corr.shape[0] < 3:
+        st.warning("Data tidak cukup untuk menghitung korelasi.")
+        return
+
+    corr_matrix = df_corr.corr()
+    data_korelasi = {
+        'Polutan': ['CO', 'NO2', 'SO2'],
+        'Korelasi dengan PM2.5': [
+            corr_matrix.loc['PM2.5', 'CO'],
+            corr_matrix.loc['PM2.5', 'NO2'],
+            corr_matrix.loc['PM2.5', 'SO2']
+        ]
+    }
+    df_korelasi = pd.DataFrame(data_korelasi)
+
+    # Buat visualisasi batang
+    fig, ax = plt.subplots(figsize=(5, 5))
+    sns.barplot(data=df_korelasi, x='Polutan', y='Korelasi dengan PM2.5', palette='Set2', ax=ax)
+    ax.set_ylim(0, 1)
+    ax.set_title(f"Korelasi PM2.5 dengan Polutan Lain ({location}, {year})")
+    ax.set_ylabel("Nilai Korelasi")
+
+    # Tambah label nilai korelasi
+    for i, val in enumerate(df_korelasi['Korelasi dengan PM2.5']):
+        ax.text(i, val + 0.02, f"{val:.2f}", ha='center', va='bottom')
+
+    st.pyplot(fig)
     
-st.markdown(f"""
-Visualisasi ini menunjukan pola persebaran konsentrasi PM2.5 dengan suhu (**TEMP**) dan kelembapan (**DEWP**) di Stasiun **{location}** pada tahun **{year}**.
+    st.markdown(f"""
+Visualisasi ini menampilkan **nilai korelasi antara PM2.5 dan polutan (CO, NO2, SO2)** di stasiun **{location}** untuk masing-masing tahun.
 
 ### 🔍 **Insight**
-- **PM2.5 terhadap Suhu (TEMP):**  
-  Suhu berada dalam rentang **{temp_min:.1f}°C hingga {temp_max:.1f}°C**. PM2.5 tampak cenderung **lebih tinggi pada suhu rendah hingga sedang**, dan **menurun saat suhu melebihi sekitar {temp_threshold}°C**.
-
-- **PM2.5 terhadap Kelembapan (DEWP):**  
-  Kelembapan berkisar antara **{dewp_min:.1f}°C hingga {dewp_max:.1f}°C**. PM2.5 terlihat **cenderung meningkat saat kelembapan naik**, dan **PM2.5 sangat tinggi (>400 µg/m³)** paling sering muncul pada rentang kelembapan **{dewp_high_str}**.  
 """)
+    for i, row in df_korelasi.iterrows():
+        polutan = row['Polutan']
+        nilai = row['Korelasi dengan PM2.5']
+        if nilai > 0.7:
+            kategori = "sangat kuat"
+        elif nilai > 0.5:
+            kategori = "kuat"
+        elif nilai > 0.3:
+            kategori = "cukup"
+        else:
+            kategori = "lemah"
+
+        st.markdown(
+            f"- Korelasi antara PM2.5 dan **{polutan}** adalah **{nilai:.2f}** (**{kategori}**), "
+            f"menunjukkan bahwa ketika {polutan} meningkat, kemungkinan besar PM2.5 juga ikut meningkat."
+        )
+        
     
-# Heatmap korelasi PM2.5, suhu, dan kelembapan
-st.markdown("🔥 Heatmap Korelasi antara PM2.5 dengan suhu dan kelembapan:")
+# Jalankan jika data tersedia
+if not filtered_df.empty:
+    plot_correlation_pm25_with_polutants(filtered_df, location, year)
+else:
+    st.warning("Silakan pilih stasiun dan tahun untuk menampilkan analisis korelasi.")
+    
 
-fig2, ax2 = plt.subplots(figsize=(8, 4))
-weather_vars = ['PM2.5', 'TEMP', 'DEWP']
-weather_corr = filtered_df[[col for col in weather_vars if col in filtered_df.columns]].corr()
-
-# Format korelasi untuk heatmap
-corr_format = ".2f"
-
-# Tampilkan heatmap dengan warna simetris (-1 s.d. 1)
-sns.heatmap(
-    weather_corr,
-    annot=True,
-    fmt=corr_format,
-    cmap='coolwarm',
-    vmin=-1, vmax=1, center=0,  # ⬅️ Tambahan penting untuk menjaga skala warna tetap simetris
-    ax=ax2
-)
-ax2.set_title(f"Pengaruh Kelembapan terhadap PM2.5 ({location}, {year})")
-st.pyplot(fig2)
-
-
-# Insight dengan format konsisten
-st.markdown(f"""
-Visualisasi ini menunjukkan korelasi antara suhu, kelembapan, dan kadar PM2.5 di Stasiun **{location}** pada tahun **{year}**.
-
-### 🔍 **Insight**  
-
-**Korelasi PM2.5 dengan Suhu (TEMP): {format(corr_temp, corr_format)}**  
-- Nilai korelasi negatif ini menunjukkan bahwa **saat suhu meningkat, kadar PM2.5 cenderung menurun**.
-
-**Korelasi PM2.5 dengan Kelembapan (DEWP): {format(corr_dewp, corr_format)}**  
-- Nilai korelasi positif ini menunjukkan bahwa **ketika kelembapan meningkat, kadar PM2.5 juga cenderung meningkat**.
-""")
-
-
-# ========== 4. Geospasial PM2.5 per Musim ==========
+# ========== 5. Geospasial PM2.5 per Musim ==========
 
 st.subheader("🗺️ Visualisasi Geospasial PM2.5 per Musim")
 
@@ -236,21 +262,21 @@ musim_icons = {
 
 # Fungsi kategorisasi warna untuk folium
 def categorize_color(pm25):
-    if pm25 < 65:
+    if pm25 < 70:
         return 'green'
-    elif pm25 < 75:
+    elif pm25 < 85:
         return 'orange'
     else:
         return 'red'
 
 # Fungsi kategori teks
 def get_pm25_label(pm25):
-    if pm25 < 65:
-        return 'Rendah'
-    elif pm25 < 75:
+    if pm25 < 70:
         return 'Sedang'
-    else:
+    elif pm25 < 85:
         return 'Tinggi'
+    else:
+        return 'Sangat Tinggi'
 
 # Pilih musim dari UI
 musim_terpilih = st.radio("Pilih Musim:", list(musim_icons.keys()), horizontal=True)
@@ -285,6 +311,34 @@ for _, row in musim_data.iterrows():
         icon=folium.Icon(color=color, icon=icon_name, prefix='fa')
     ).add_to(m)
 
+# Legenda peta
+legend_html = """
+{% macro html(this, kwargs) %}
+<div style="
+    position: fixed; 
+    bottom: 50px; 
+    left: 50px; 
+    width: 240px;
+    background-color: white; 
+    border: 2px solid grey; 
+    z-index: 9999;
+    font-size: 14px; 
+    padding: 12px; 
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    border-radius: 8px; 
+    line-height: 1.5;">
+<b>Legenda Kategori PM2.5</b><br>
+<i class="fa fa-map-marker fa-lg" style="color:green"></i> Sedang (&lt; 70)<br>
+<i class="fa fa-map-marker fa-lg" style="color:orange"></i> Tinggi (70–85)<br>
+<i class="fa fa-map-marker fa-lg" style="color:red"></i> Sangat Tinggi (&gt; 85)<br>
+</div>
+{% endmacro %}
+"""
+
+legend = MacroElement()
+legend._template = Template(legend_html)
+m.get_root().add_child(legend)
+
 # Tampilkan peta
 folium_static(m)
 
@@ -306,9 +360,9 @@ st.markdown(f"""
 """)
 
 
-# ========== 5. Distribusi Kategori PM2.5 per Stasiun per Musim ==========
+# ========== 6. Distribusi Kategori PM2.5 per Stasiun per Musim ==========
 
-st.subheader(f"🏭 Distribusi Kategori PM2.5 per Stasiun pada {musim_terpilih}")
+st.subheader(f"📊 Distribusi Kategori PM2.5 per Stasiun pada {musim_terpilih}")
 
 # Filter data musim terpilih
 season_df = avg_pm25_season_station[avg_pm25_season_station['Musim'] == musim_terpilih].copy()
@@ -350,4 +404,44 @@ Visualisasi ini menampilkan distribusi kategori rata-rata PM2.5 pada musim **{mu
 - Jumlah stasiun dengan kategori **Rendah**: {counts.get('Rendah', 0)}  
 - Jumlah stasiun dengan kategori **Sedang**: {counts.get('Sedang', 0)}  
 - Jumlah stasiun dengan kategori **Tinggi**: {counts.get('Tinggi', 0)}  
+""")
+
+st.markdown("") 
+
+st.markdown("""
+### 🧾 Kesimpulan Analisis
+
+#### 📌 **Conclusion Pertanyaan 1**  
+**Bagaimana perubahan tren bulanan konsentrasi PM2.5 di berbagai stasiun pada tahun 2013–2017?**
+
+1. Tiap stasiun menunjukkan tren bulanan PM2.5 yang mirip selama periode 2013–2017:
+   - **2013**: Lonjakan pada Maret dan Juni, penurunan pada Juli–September.  
+   - **2014**: Penurunan dibanding 2013, dengan lonjakan kecil di Februari.  
+   - **2015**: Lonjakan ekstrem di Desember (>160 μg/m³), menjadi puncak tertinggi.  
+   - **2016**: Tren menurun namun tetap ada lonjakan di akhir tahun.  
+   - **2017**: Data hanya Januari–Februari, tetap menunjukkan kadar tinggi.
+
+2. Stasiun dengan **rata-rata PM2.5 tertinggi**: **Dongsi**, **Nongzhanguan**, **Wanshouxigong**  
+   Stasiun dengan **rata-rata PM2.5 terendah**: **Dingling**, **Huairou**, **Changping**
+
+---
+
+#### 📌 **Conclusion Pertanyaan 2**  
+**Bagaimana hubungan antara PM2.5 dengan CO, NO₂, dan SO₂ di berbagai stasiun tahun 2013–2017, dan polutan mana yang paling berkorelasi?**
+
+
+1. **CO dan NO₂** menunjukkan korelasi yang paling kuat dan konsisten terhadap PM2.5.  
+2. **SO₂** memiliki hubungan paling lemah, dan korelasinya cenderung menurun dari tahun ke tahun.
+
+---
+
+#### 📌 **Conclusion Pertanyaan 3 (Analisis Lanjutan)**  
+**Bagaimana pola spasial konsentrasi PM2.5 berdasarkan musim di seluruh stasiun di Beijing?**
+
+Sebaran spasial musiman di seluruh stasiun menunjukkan bahwa:
+- ❄️ **Musim dingin dan semi** memiliki tingkat PM2.5 tertinggi, dengan sebagian besar stasiun pada kategori polusi tinggi.  
+- 🌤️ **Musim panas** menunjukkan kualitas udara terbaik, mayoritas stasiun berada pada kategori sedang hingga rendah.  
+- 🍂 **Musim gugur** berada di tengah, dengan banyak stasiun dalam kategori tinggi namun tidak separah musim dingin.
+
+---
 """)
